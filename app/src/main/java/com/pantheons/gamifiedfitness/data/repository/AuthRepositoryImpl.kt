@@ -1,7 +1,6 @@
 package com.pantheons.gamifiedfitness.data.repository
 
 import com.google.firebase.auth.FirebaseUser
-import javax.inject.Inject
 
 
 interface AuthRepositoryImpl  {

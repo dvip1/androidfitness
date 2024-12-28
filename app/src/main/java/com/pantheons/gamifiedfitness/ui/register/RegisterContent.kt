@@ -1,5 +1,6 @@
 package com.pantheons.gamifiedfitness.ui.register
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,13 +16,16 @@ import com.pantheons.gamifiedfitness.ui.common.viewmodel.AuthViewModel
 @Composable
 fun RegisterContent(
     onNavigateToLogin: () -> Unit,
-    onRegisterSuccess: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     val authState by viewModel.authState.collectAsState()
+    LaunchedEffect(Unit) {
+        Log.d("RegisterContent", "Initial auth state: $authState")
+        viewModel.checkStatus()
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -55,11 +59,6 @@ fun RegisterContent(
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(onClick = onNavigateToLogin) {
             Text("Already have an account? Login")
-        }
-        LaunchedEffect(authState.isAuthenticated) {
-            if (authState.isAuthenticated) {
-                onRegisterSuccess()
-            }
         }
     }
 }

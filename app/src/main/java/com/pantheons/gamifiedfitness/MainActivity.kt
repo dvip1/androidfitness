@@ -1,15 +1,17 @@
 package com.pantheons.gamifiedfitness
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,35 +42,42 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
-fun App(authUtils:AuthUtils) {
+fun App(authUtils: AuthUtils) {
     val navController = rememberNavController()
-    val coroutineScope = rememberCoroutineScope()
+    val authState by authUtils.authState.collectAsState()
+
+    LaunchedEffect(authState.isAuthenticated) {
+        Log.d("App", "Auth state changed: isAuthenticated=${authState.isAuthenticated}")
+        if (authState.isAuthenticated) {
+            Log.d("App", "Navigating to home")
+            navController.navigate("home") {
+                popUpTo(0) { inclusive = true }
+            }
+        }
+    }
+
     NavHost(
         navController = navController,
-        startDestination = "register"
+        startDestination = if (authState.isAuthenticated) "home" else "login"
     ) {
         composable("register") {
             RegisterContent(
                 onNavigateToLogin = {
-                    navController.navigate("login")
-                },
-                onRegisterSuccess = {
-                    navController.navigate("home") {
+                    navController.navigate("login") {
                         popUpTo("register") { inclusive = true }
                     }
-                }
+                },
             )
         }
+
         composable("login") {
             LoginContent(
-                onNavigateToHome = {
-                    navController.navigate("home") {
+                onNavigateToRegister = {
+                    navController.navigate("register") {
                         popUpTo("login") { inclusive = true }
                     }
-                },
-                onNavigateToRegister = {
-                    navController.navigate("register")
                 }
             )
         }
@@ -78,7 +87,6 @@ fun App(authUtils:AuthUtils) {
         }
     }
 }
-
 @Composable
 fun MainScreen() {
 
@@ -104,9 +112,8 @@ fun MainScreen() {
             }
 
             composable(NavigationItem.Profile.route) {
-                val viewModel = viewModel<ProfileViewModel>()
-                val uiState by viewModel.uiState.collectAsState()
-                ProfileContent(uiState = uiState)
+                val viewModel:ProfileViewModel = hiltViewModel()
+                ProfileContent(viewModel = viewModel)
             }
         }
     }
