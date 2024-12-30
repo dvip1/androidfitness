@@ -2,12 +2,19 @@ package com.pantheons.gamifiedfitness.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pantheons.gamifiedfitness.data.remote.model.ProfileResponse
+import com.pantheons.gamifiedfitness.data.remote.model.ResponseData
+import com.pantheons.gamifiedfitness.data.remote.model.UserAddRequest
+import com.pantheons.gamifiedfitness.data.repository.AuthRepositoryImpl
+import com.pantheons.gamifiedfitness.data.repository.UserRepositoryImpl
 import com.pantheons.gamifiedfitness.ui.common.viewmodel.AuthEvent
 import com.pantheons.gamifiedfitness.ui.common.viewmodel.AuthState
 import com.pantheons.gamifiedfitness.util.auth.AuthUtils
+import com.pantheons.gamifiedfitness.util.network.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,7 +24,6 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
     private val _authState = MutableStateFlow(AuthState())
     val authState: StateFlow<AuthState> = _authState
-
     fun checkStatus(){
         viewModelScope.launch {
             authManager.checkAuthStatus()

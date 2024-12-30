@@ -2,16 +2,9 @@ package com.pantheons.gamifiedfitness.api
 
 interface ApiEndpoint {
     companion object {
-        const val BASE_URL = "http://localhost:3000/"
-        const val USER = "user"
+        const val BASE_URL = "http://10.0.2.2:3000/"
         const val USER_ADD = "user/add"
-
-        fun usernameExists(username: String): String {
-            return "user/exists/$username"
-        }
-
-        fun userProfile(uid: String): String {
-            return "user/profile/$uid"
-        }
+        const val USERNAME_EXISTS = "user/exists/{username}" // Path parameter placeholder
+        const val USER_PROFILE = "user/profile/{uid}"
     }
 }
