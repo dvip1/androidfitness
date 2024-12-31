@@ -15,6 +15,8 @@ data class AuthState(
     val error: String? = null,
     val isAuthenticated: Boolean = false,
     val uid: String? = null,
+    val username: String? = null,
+    val email: String? = null
 )
 
 sealed class AuthEvent {

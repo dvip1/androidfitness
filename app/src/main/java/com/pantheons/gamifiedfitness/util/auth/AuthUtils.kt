@@ -43,7 +43,7 @@ class AuthUtils @Inject constructor(
                     _authState.value = _authState.value.copy(
                         isLoading = false,
                         isAuthenticated = true,
-                        uid = uid
+                        uid = uid,
                     )
                     Log.d("AuthUtils", "login: ${_authState.value}")
                 }
@@ -69,7 +69,8 @@ class AuthUtils @Inject constructor(
                    _authState.value = _authState.value.copy(
                        isLoading = false,
                        isAuthenticated = true,
-                       uid = uid
+                       uid = uid,
+                       username = username,
                    )
 
                }
@@ -100,7 +101,9 @@ class AuthUtils @Inject constructor(
                 }
         }
     }
-
+    suspend fun getUid(): String{
+        return authRepository.getCurrentUser()?.uid ?: ""
+    }
     suspend fun isAuthenticated(): Boolean {
         return authRepository.getCurrentUser() != null
     }
