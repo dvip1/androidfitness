@@ -50,4 +50,7 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.Logout -> authManager.logout()
         }
     }
+    fun confirmPassword(password: String, confirmPassword: String): Boolean {
+        return password == confirmPassword
+    }
 }

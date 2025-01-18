@@ -8,5 +8,7 @@ data class ProfileResponse (
     val karmas: Number,
 )
 data class ResponseData (
-    val message: String
+    val message: String,
+    val error: String,
+    val success: String
 )

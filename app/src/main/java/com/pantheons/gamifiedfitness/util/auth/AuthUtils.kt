@@ -58,7 +58,6 @@ class AuthUtils @Inject constructor(
     }
 
     fun register(email: String, password: String, username: String) {
-
         managerScope.launch {
             _authState.value = _authState.value.copy(isLoading = true, error = null)
            authRepository.register(email, password, username)

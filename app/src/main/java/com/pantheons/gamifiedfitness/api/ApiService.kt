@@ -1,4 +1,6 @@
 package com.pantheons.gamifiedfitness.api
+import com.pantheons.gamifiedfitness.data.remote.model.CreateCommunityRequest
+import com.pantheons.gamifiedfitness.data.remote.model.CreatePostRequest
 import com.pantheons.gamifiedfitness.data.remote.model.ProfileResponse
 import com.pantheons.gamifiedfitness.data.remote.model.ResponseData
 import com.pantheons.gamifiedfitness.data.remote.model.UserAddRequest
@@ -17,4 +19,13 @@ interface ApiService{
 
     @GET(ApiEndpoint.USER_PROFILE)
     suspend fun getUserProfile(@Path("uid")uid: String): Response<ProfileResponse>
+
+    @POST(ApiEndpoint.CREATE_COMMUNITY)
+    suspend fun createCommunity(@Body request: CreateCommunityRequest): Response<ResponseData>
+
+   @POST(ApiEndpoint.CREATE_POST)
+   suspend fun createPost(@Body request: CreatePostRequest): Response<ResponseData>
+
+   @GET(ApiEndpoint.GET_USER_COMMUNITY)
+   suspend fun getUserCommunity(@Path("uid")uid:String)
 }
