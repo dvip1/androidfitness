@@ -33,6 +33,7 @@ import com.pantheons.gamifiedfitness.ui.home.HomeViewModel
 import com.pantheons.gamifiedfitness.ui.profile.ProfileContent
 import com.pantheons.gamifiedfitness.ui.profile.ProfileViewModel
 import com.pantheons.gamifiedfitness.util.auth.AuthUtils
+import androidx.lifecycle.viewModelScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +49,7 @@ fun HomeLayout(authUtils: AuthUtils) {
             IconButton(onClick = { expanded = true }) {
                 Icon(Icons.Default.Menu, contentDescription = "Favorite")
             }
-            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+           DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 DropdownMenuItem(text = { Text("Logout") }, onClick = { authUtils.logout() })
                 DropdownMenuItem(text = { Text("create community") },
                     onClick = { showDialog = true })

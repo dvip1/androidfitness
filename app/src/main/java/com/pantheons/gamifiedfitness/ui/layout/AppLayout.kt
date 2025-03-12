@@ -16,7 +16,6 @@ import com.pantheons.gamifiedfitness.util.auth.AuthUtils
 fun AppLayout(authUtils: AuthUtils) {
     val navController = rememberNavController()
     val authState by authUtils.authState.collectAsState()
-
     LaunchedEffect(authState.isAuthenticated) {
         Log.d("App", "Auth state changed: isAuthenticated=${authState.isAuthenticated}")
         if (authState.isAuthenticated) {

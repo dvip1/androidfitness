@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.pantheons.gamifiedfitness"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.pantheons.gamifiedfitness"
@@ -49,6 +49,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("androidx.compose.material3:material3:1.3.1")
     implementation("com.google.dagger:hilt-android:2.50")
+    implementation(libs.androidx.benchmark.common)
     kapt("com.google.dagger:hilt-android-compiler:2.50")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
@@ -58,7 +59,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
-
+    implementation("androidx.health.connect:connect-client:1.1.0-alpha11")
+    implementation("com.google.accompanist:accompanist-permissions:0.36.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

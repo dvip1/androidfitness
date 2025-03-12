@@ -1,18 +1,22 @@
 package com.pantheons.gamifiedfitness.data.remote.model
 
-data class UserAddRequest (
+data class UserAddRequest(
     val uid: String,
     val username: String,
     val email: String,
-    )
-data class CreateCommunityRequest (
+)
+
+data class CreateCommunityRequest(
     val leader: String,
     val name: String,
     val description: String,
-    val rules: String,
+    val rules: String = "",
     val is_private: Boolean,
+    val media: String = "",
+    val members: List<String> = listOf()
 )
-data class CreatePostRequest (
+
+data class CreatePostRequest(
     val uid: String,
     val community: String,
     val title: String,
