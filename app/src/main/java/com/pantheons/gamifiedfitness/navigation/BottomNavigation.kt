@@ -9,7 +9,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
-    NavigationBar {
+    val colorScheme = MaterialTheme.colorScheme
+    NavigationBar(
+        containerColor = colorScheme.surface,
+        contentColor = colorScheme.onSurface
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
@@ -21,8 +25,19 @@ fun BottomNavigation(navController: NavHostController) {
 
         items.forEach { item ->
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = item.title) },
-                label = { Text(item.title) },
+                icon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.title,
+                        tint = if (currentRoute == item.route) colorScheme.primary else colorScheme.onSurface
+                    )
+                },
+                label = {
+                    Text(
+                        item.title,
+                        color = if (currentRoute == item.route) colorScheme.primary else colorScheme.onSurface
+                    )
+                },
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
@@ -32,7 +47,14 @@ fun BottomNavigation(navController: NavHostController) {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = colorScheme.primary,
+                    selectedTextColor = colorScheme.primary,
+                    unselectedIconColor = colorScheme.onSurface,
+                    unselectedTextColor = colorScheme.onSurface,
+                    indicatorColor = colorScheme.surfaceVariant
+                )
             )
         }
     }
