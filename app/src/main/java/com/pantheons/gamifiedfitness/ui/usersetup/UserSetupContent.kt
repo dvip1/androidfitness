@@ -15,36 +15,41 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pantheons.gamifiedfitness.ui.theme.GamifiedFitnessTheme
+import com.pantheons.gamifiedfitness.util.common.UserSettingsManager
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun UserSetupPreview() {
-    GamifiedFitnessTheme {
-        UserSetupContent()
-    }
-}
+fun UserSetupContent(viewModel: UserSetupViewModel, onSetupComplete: () -> Unit) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val _page = remember { mutableStateOf(1) }
 
-@Composable
-fun UserSetupContent() {
     val formValues = remember { mutableStateMapOf<String, String>() }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             Box(
                 modifier = Modifier
@@ -69,7 +74,11 @@ fun UserSetupContent() {
             ) {
                 LinearProgressIndicator(
                     progress = {
-                        0.33f // Assuming this is the first of three screens
+                        when (viewModel.page) {
+                            1 -> 0.33f
+                            2 -> 0.67f
+                            else -> 1f
+                        }
                     },
                     modifier = Modifier
                         .width(200.dp)
@@ -107,9 +116,34 @@ fun UserSetupContent() {
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    QuestionSet1(formValues)
+
+                    if (_page.value == 1)
+                        QuestionSet1(formValues)
+                    else
+                        QuestionSet2(formValues)
+
                     Button(
-                        onClick = { /* Handle button click */ },
+                        onClick = {
+                            if (viewModel.page == 1) {
+                                if(formValues["name"].isNullOrEmpty() || formValues["age"].isNullOrEmpty()) {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Please fill all the fields")
+                                    }
+                                } else {
+                                    viewModel.onNextClicked(formValues["name"].toString(), formValues["age"].toString())
+                                    _page.value = 2
+                                }
+                            } else if (viewModel.page == 2) {
+                                if(formValues["start"].isNullOrEmpty() || formValues["goal"].isNullOrEmpty()) {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Please fill all the fields")
+                                    }
+                                } else {
+                                    viewModel.onNextClicked(formValues["start"].toString(), formValues["goal"].toString())
+                                    onSetupComplete()
+                                }
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 16.dp)
@@ -127,18 +161,18 @@ fun UserSetupContent() {
 }
 
 @Composable
-fun QuestionSet1(x0: SnapshotStateMap<String, String>) {
+fun QuestionSet1(formValues: SnapshotStateMap<String, String>) {
     Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ){
         TextField(
-            value = x0["name"] ?: "",
-            onValueChange = { x0["name"] = it },
+            value = formValues["name"] ?: "",
+            onValueChange = { formValues["name"] = it },
             label = { Text("Name") },
             modifier = Modifier.fillMaxWidth()
         )
         TextField(
-            value = x0["age"] ?: "",
-            onValueChange = { x0["age"] = it },
+            value = formValues["age"] ?: "", onValueChange = { formValues["age"] = it },
             label = { Text("Age") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -146,20 +180,21 @@ fun QuestionSet1(x0: SnapshotStateMap<String, String>) {
 }
 
 @Composable
-fun QuestionSet2(x0: SnapshotStateMap<String, String>){
-    Column {
+fun QuestionSet2(formValues: SnapshotStateMap<String, String>){
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         TextField(
-            value = x0["start"] ?: "",
-            onValueChange = { x0["start"] = it },
-            label = { Text("Any Daily workout ?") },
+            value = formValues["start"] ?: "",
+            onValueChange = { formValues["start"] = it },
+            label = { Text("Any Daily workout?") },
             modifier = Modifier.fillMaxWidth()
         )
         TextField(
-            value = x0["goal"] ?: "",
-            onValueChange = { x0["goal"] = it },
-            label = { Text("What's your goal ? ") },
+            value = formValues["goal"] ?: "",
+            onValueChange = { formValues["goal"] = it },
+            label = { Text("What's your goal?") },
             modifier = Modifier.fillMaxWidth()
         )
-
     }
 }
