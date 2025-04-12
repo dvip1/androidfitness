@@ -1,16 +1,8 @@
 package com.pantheons.gamifiedfitness.ui.layout
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,29 +25,16 @@ import com.pantheons.gamifiedfitness.ui.home.HomeViewModel
 import com.pantheons.gamifiedfitness.ui.profile.ProfileContent
 import com.pantheons.gamifiedfitness.ui.profile.ProfileViewModel
 import com.pantheons.gamifiedfitness.util.auth.AuthUtils
-import androidx.lifecycle.viewModelScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeLayout(authUtils: AuthUtils) {
-    val authState by authUtils.authState.collectAsState()
     val navController = rememberNavController()
-    var expanded by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
     var itemName by remember { mutableStateOf("") }
 
-    Scaffold(topBar = {
-        TopAppBar(title = { Text("Gamified Fitness") }, actions = {
-            IconButton(onClick = { expanded = true }) {
-                Icon(Icons.Default.Menu, contentDescription = "Favorite")
-            }
-           DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                DropdownMenuItem(text = { Text("Logout") }, onClick = { authUtils.logout() })
-                DropdownMenuItem(text = { Text("create community") },
-                    onClick = { showDialog = true })
-            }
-        })
-    }, bottomBar = { BottomNavigation(navController = navController) }) { paddingValues ->
+    Scaffold(
+        bottomBar = { BottomNavigation(navController = navController) }) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = NavigationItem.Home.route,
@@ -78,7 +57,8 @@ fun HomeLayout(authUtils: AuthUtils) {
                 ProfileContent(viewModel = viewModel)
             }
         }
-        CreateCommunityDialog(showDialog = showDialog,
+        CreateCommunityDialog(
+            showDialog = showDialog,
             onDismissRequest = { showDialog = false },
             onConfirm = { name, description, rules, isPrivate ->
                 showDialog = false
