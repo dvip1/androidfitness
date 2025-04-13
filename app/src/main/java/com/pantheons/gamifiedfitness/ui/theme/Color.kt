@@ -13,9 +13,9 @@ val Pink40 = Color(0xFF7D5260)
 // Light theme
 val Primary = Color(0xFF99BC85)       // Accent from your light palette
 val Secondary = Color(0xFFFDFAF6)     // Soft secondary
-val Tertiary = Color(0xFFE4EFE7)      // Gentle tertiary
-val Background = Color(0xFFFAF1E6)    // Base background
-val Surface = Background            // Using the same for surfaces
+val Background = Color(0xFFFAF1E6) // A warm, creamy beige
+val Tertiary = Color(0xFFE4EFE7)   // A pale sage green
+val Surface = Color(0xFFF1E9DC) // Slightly deeper than Background
 val OnPrimary = Color(0xFFFFFFFF)     // White text on colored backgrounds
 val OnSecondary = Color(0xFF000000)   // Black text on light secondary
 val OnTertiary = Color(0xFF000000)
@@ -29,13 +29,11 @@ val Outline = Color(0xFFBDBDBD)
 // Dark Color
 val DarkPrimary = Color(0xFF727D73)     // Dark accent
 val DarkSecondary = Color(0xFFAAB99A)   // Slightly lighter accent
-val DarkTertiary = Color(0xFFD0DDD0)    // Even lighter accent
-// For true dark mode, we choose a deep background to ensure text legibility.
-val DarkBackground = Color(0xFF121212)
-val DarkSurface = DarkBackground
+val DarkBackground = Color(0xFF121212) // Deep black-gray
+val DarkTertiary = Color(0xFFD0DDD0)   // Soft gray-green
+val DarkSurface = Color(0xFF1E1E1E) // Just above the background
 val DarkOnPrimary = Color(0xFFFFFFFF)
 val DarkOnSecondary = Color(0xFFFFFFFF)
-// Depending on the luminance of DarkTertiary, adjust onTertiary for optimal contrast.
 val DarkOnTertiary = Color(0xFF000000)
 val DarkOnBackground = Color(0xFFFFFFFF)
 val DarkOnSurface = Color(0xFFFFFFFF)
